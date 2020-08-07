@@ -14,9 +14,4 @@ public class KloudeoneCommentsServiceApplication {
 	}
 	
 
-	@Bean
-	public  ObjectMapper getObjectMapper() {
-		return new ObjectMapper();
-	}
-
 }

@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
@@ -34,13 +35,13 @@ public class CommentsEntity {
 	private String postedBy;
 	private Date postedOn;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "postid",referencedColumnName = "postid")
 	@JsonIgnore
-	private PostsEntity posts;
+  	private PostsEntity posts;
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "commentid",referencedColumnName = "commentid")
-	private List<ReplyCommentsEntity> rplyComments;
+	private List<ReplyCommentsEntity> replyComments;
  	
 }

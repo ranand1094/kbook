@@ -2,6 +2,7 @@ package com.kloudeone.comments.entities;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,14 +28,17 @@ public class ReplyCommentsEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(length = 30)
 	private Long replycommentid;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "commentid",referencedColumnName = "commentid")
+	@JsonIgnore
+ 	private CommentsEntity commentsEntity;
+	
 	private String comment;
 	private String postedBy;
 	private Date postedOn; 
 	
-	@ManyToOne
-	@JoinColumn(name = "commentid",referencedColumnName = "commentid")
-	@JsonIgnore
-	private CommentsEntity commentsEntity;
+	
 	
 	
 }

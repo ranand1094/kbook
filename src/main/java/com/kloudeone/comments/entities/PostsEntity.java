@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Getter;
 import lombok.Setter;
 @Entity
@@ -32,6 +34,8 @@ public class PostsEntity {
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "postid",referencedColumnName = "postid")
-	private List<CommentsEntity> comments;
+ 	private List<CommentsEntity> comments;
+	
+	
 	
 }

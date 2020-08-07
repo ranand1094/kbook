@@ -36,7 +36,7 @@ public class CommentsController {
 		return commentsService.getAllComments();
 	}
 	
-	@PostMapping("/{commentid}/reply")
+	@PostMapping("/{commentid}/reply/")
 	public Map addNewReplyComment(@PathVariable Long commentid,@RequestBody CommentsModel commentsModel)
 	{
 		return commentsService.addNewReplyComment(commentid,commentsModel);

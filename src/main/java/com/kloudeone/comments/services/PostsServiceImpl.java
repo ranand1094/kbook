@@ -1,7 +1,7 @@
 package com.kloudeone.comments.services;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,19 +26,19 @@ public class PostsServiceImpl implements PostsInterface,HelperInterface {
 	
 	@Override
 	public Map addNewPost(PostsModel postsModel) {
-		Map response = new HashMap<>();
+		Map response = new LinkedHashMap<>();
 
 		try
 		{
 		postsEntity = convertObj(postsModel,postsEntity);
 		postsEntity = postRepository.save(postsEntity);
-		response.put("ResponseCode","201");
-		response.put("ResponseMessage","Created a new post");
-		response.put("PostID",postsEntity.getPostid());
+		response.put("responseCode","201");
+		response.put("responseMessage","Created a new post");
+		response.put("postID",postsEntity.getPostid());
 		}
 		catch(Exception e) {
-			response.put("ResponseCode","500");
-			response.put("ResponseMessage","Error in creating the post - "+e.getMessage());
+			response.put("responseCode","500");
+			response.put("responseMessage","Error in creating the post - "+e.getMessage());
 		}
 		return response;
 	}
@@ -46,22 +46,22 @@ public class PostsServiceImpl implements PostsInterface,HelperInterface {
 
 	@Override
 	public Map getPost(Long post) {
-		Map response = new HashMap<>();
+		Map response = new LinkedHashMap<>();
 		Optional<PostsEntity> posts = postRepository.findById(post);
 		
 		if(posts.isPresent())
 		{
 			 postsEntity = posts.get();
 			response = convertObj(postsEntity, response);
-			response.put("ResponseCode", "200");
-			response.put("ResponseMessage", "Request processed successfully");
+			response.put("responseCode", "200");
+			response.put("responseMessage", "Request processed successfully");
 			
 			
 		}
 		else
 		{
-			response.put("ResponseCode", "404");
-			response.put("ResponseMessage", "No such post found");
+			response.put("responseCode", "404");
+			response.put("responseMessage", "No such post found");
 		}
 		
 		return response;
@@ -73,27 +73,27 @@ public class PostsServiceImpl implements PostsInterface,HelperInterface {
 
 	@Override
 	public Map getAllPosts() {
-		Map response = new HashMap<>();
+		Map response = new LinkedHashMap<>();
 		
 		try {
 		List<PostsEntity> listOfPosts =  postRepository.findAll();
 		if(!listOfPosts.isEmpty())
 		{
-		response.put("ResponseCode", "200");
-		response.put("ResponseMessage", "Request processed successfully");
- 		response.put("Comments", listOfPosts);
+		response.put("responseCode", "200");
+		response.put("responseMessage", "Request processed successfully");
+ 		response.put("listOfPosts", listOfPosts);
 		}
 		else
 		{
-			response.put("ResponseCode", "404");
-			response.put("ResponseMessage", "No Active Posts.");
+			response.put("responseCode", "404");
+			response.put("responseMessage", "No Active Posts.");
 			}
 		
 		}
 		catch(Exception ex)
 		{
-			response.put("ResponseCode", "404");
-			response.put("ResponseMessage", "No Active Posts.");
+			response.put("responseCode", "500");
+			response.put("responseMessage", "No Active Posts.");
 			}
 		return response;
 	}

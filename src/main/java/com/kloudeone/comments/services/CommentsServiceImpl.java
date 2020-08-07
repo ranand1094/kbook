@@ -46,16 +46,16 @@ public class CommentsServiceImpl implements CommentsInterface, HelperInterface {
 			try {
 				commentsEntity.setPosts(validateId.get());
 				commentsEntity = commentsRepository.save(commentsEntity);
-				response.put("ResponseCode", "200");
-				response.put("ResponseMessage", "200");
-				response.put("PostID", commentsEntity.getCommentid());
+				response.put("responseCode", "200");
+				response.put("responseMessage", "Added a new comment.");
+				response.put("postID", commentsEntity.getCommentid());
 			} catch (Exception ex) {
-				response.put("ResponseCode", "500");
-				response.put("ResponseMessage", "Error in processing - " + ex.getMessage());
+				response.put("responseCode", "500");
+				response.put("responseMessage", "Error in processing - " + ex.getMessage());
 			}
 		} else {
-			response.put("ResponseCode", "404");
-			response.put("ResponseMessage", "No such post found");
+			response.put("responseCode", "404");
+			response.put("responseMessage", "No such post found.");
 		}
 
 		return response;
@@ -64,12 +64,12 @@ public class CommentsServiceImpl implements CommentsInterface, HelperInterface {
 	@Override
 	public Map getAllComments() {
 
-		Map response = new HashMap<>();
+		Map response = new LinkedHashMap<>();
 		List<CommentsEntity> listOfComments = new ArrayList<CommentsEntity>();
 		listOfComments = commentsRepository.findAll();
-		response.put("ResponseCode", "200");
-		response.put("ResponseMessage", "200");
-		response.put("Comments", listOfComments);
+		response.put("responseCode", "200");
+		response.put("responseMessage", "Request Processed Successfully");
+		response.put("listOfPosts", listOfComments);
 		return response;
 	}
 
@@ -77,22 +77,25 @@ public class CommentsServiceImpl implements CommentsInterface, HelperInterface {
 	public Map addNewReplyComment(Long commentid, CommentsModel commentsModel) {
 		Map response = new LinkedHashMap<>();
 
-		Optional<CommentsEntity> validateId = commentsRepository.findById(commentid);
-		if (validateId.isPresent()) {
-			replyCommentsEntity.setCommentsEntity(validateId.get());
+ 		Optional<CommentsEntity> validateCommentId = commentsRepository.findById(commentid);
+		if (validateCommentId.isPresent()) {
+
 			replyCommentsEntity = convertObj(commentsModel, replyCommentsEntity);
+ 			replyCommentsEntity.setCommentsEntity(validateCommentId.get());
+		
 			try {
 				replyCommentsEntity = replyCommentsRepository.save(replyCommentsEntity);
+				
 				response.put("responseCode", "200");
-				response.put("responseMessage", "200");
+				response.put("responseMessage", "Added a new reply.");
 				response.put("replyCommentID", replyCommentsEntity.getReplycommentid());
 			} catch (Exception ex) {
-				response.put("ResponseCode", "500");
-				response.put("ResponseMessage", "Error in processing - " + ex.getMessage());
+				response.put("responseCode", "500");
+				response.put("responseMessage", "Error in processing - " + ex.getMessage());
 			}
 		} else {
-			response.put("ResponseCode", "404");
-			response.put("ResponseMessage", "No such comment found");
+			response.put("responseCode", "404");
+			response.put("responseMessage", "No such comment found.");
 		}
 		return response;
 	}

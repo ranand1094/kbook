@@ -16,26 +16,23 @@ import com.kloudeone.comments.services.PostsServiceImpl;
 @RestController
 @RequestMapping("/kbook/posts")
 public class PostsController {
-	
+
 	@Autowired
 	private PostsServiceImpl postService;
-	
-	
-	@PostMapping("/add")
-	public Map addNewPost(@RequestBody PostsModel postsModel)
-	{
-		return postService.addNewPost(postsModel);
+
+	@GetMapping("/")
+	public Map getAll() {
+		return postService.getAllPosts();
 	}
 	
 	@GetMapping("/{postid}")
-	public Map getPost(@PathVariable Long postid)
-	{
+	public Map getPost(@PathVariable Long postid) {
 		return postService.getPost(postid);
 	}
-	@GetMapping("/")
-	public Map getAll()
-	{
-		return postService.getAllPosts();
-	}
 
+	@PostMapping("/new")
+	public Map addNewPost(@RequestBody PostsModel postsModel) {
+		return postService.addNewPost(postsModel);
+	}
+	
 }

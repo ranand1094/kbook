@@ -11,5 +11,4 @@ public class PostsModel {
 	
 	private String message;
 	private String postedBy;
-	private Date postedOn;
 }

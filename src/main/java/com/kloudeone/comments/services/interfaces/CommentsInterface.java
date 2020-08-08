@@ -7,7 +7,7 @@ import com.kloudeone.comments.model.CommentsModel;
 public interface CommentsInterface {
 
 	Map addNewComment(Long postId,CommentsModel commentsModel);
-	Map getAllComments();
-	Map addNewReplyComment(Long commentId,CommentsModel commentsModel);
+	Map getAllComments(Long postId);
+	Map addNewReplyComment(Long postId,Long commentId,CommentsModel commentsModel);
 
 }

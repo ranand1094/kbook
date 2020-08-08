@@ -11,5 +11,4 @@ public class CommentsModel {
 	
 	private String comment;
 	private String postedBy;
-	private Date postedOn;	
 }

@@ -1,6 +1,6 @@
 package com.kloudeone.comments.entities;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -14,7 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
@@ -33,7 +32,7 @@ public class CommentsEntity {
 	
 	private String comment;
 	private String postedBy;
-	private Date postedOn;
+	private LocalDateTime postedOn;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "postid",referencedColumnName = "postid")

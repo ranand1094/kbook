@@ -1,6 +1,6 @@
 package com.kloudeone.comments.entities;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,7 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -36,7 +35,7 @@ public class ReplyCommentsEntity {
 	
 	private String comment;
 	private String postedBy;
-	private Date postedOn; 
+	private LocalDateTime postedOn; 
 	
 	
 	

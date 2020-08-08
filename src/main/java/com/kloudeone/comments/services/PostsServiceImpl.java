@@ -1,6 +1,5 @@
 package com.kloudeone.comments.services;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,86 +15,66 @@ import com.kloudeone.comments.services.interfaces.HelperInterface;
 import com.kloudeone.comments.services.interfaces.PostsInterface;
 
 @Service
-public class PostsServiceImpl implements PostsInterface,HelperInterface {
+public class PostsServiceImpl implements PostsInterface, HelperInterface {
 
 	@Autowired
 	PostsRepository postRepository;
-	
- 	PostsEntity postsEntity = new PostsEntity();
-	
-	
+	PostsEntity postsEntity = new PostsEntity();
+
 	@Override
 	public Map addNewPost(PostsModel postsModel) {
 		Map response = new LinkedHashMap<>();
-
-		try
-		{
-		postsEntity = convertObj(postsModel,postsEntity);
-		postsEntity = postRepository.save(postsEntity);
-		response.put("responseCode","201");
-		response.put("responseMessage","Created a new post");
-		response.put("postID",postsEntity.getPostid());
-		}
-		catch(Exception e) {
-			response.put("responseCode","500");
-			response.put("responseMessage","Error in creating the post - "+e.getMessage());
+		try {
+			postsEntity = convertObj(postsModel, postsEntity);
+			postsEntity.setPostedOn(localDateTime);
+			postsEntity = postRepository.save(postsEntity);
+			response.put("responseCode", "201");
+			response.put("responseMessage", "Created a new post");
+			response.put("postID", postsEntity.getPostid());
+		} catch (Exception e) {
+			response.put("responseCode", "500");
+			response.put("responseMessage", "Error in creating the post - " + e.getMessage());
 		}
 		return response;
 	}
-
 
 	@Override
 	public Map getPost(Long post) {
 		Map response = new LinkedHashMap<>();
 		Optional<PostsEntity> posts = postRepository.findById(post);
-		
-		if(posts.isPresent())
-		{
-			 postsEntity = posts.get();
+		if (posts.isPresent()) {
+			postsEntity = posts.get();
 			response = convertObj(postsEntity, response);
 			response.put("responseCode", "200");
 			response.put("responseMessage", "Request processed successfully");
-			
-			
-		}
-		else
-		{
+			response.put("postId", postsEntity.getPostid());
+			response.put("message", postsEntity.getMessage());
+			response.put("postedBy", postsEntity.getPostedBy());
+			response.put("postedOn", postsEntity.getPostedOn());
+ 		} else {
 			response.put("responseCode", "404");
 			response.put("responseMessage", "No such post found");
 		}
-		
 		return response;
-
-		
-		
 	}
-
 
 	@Override
 	public Map getAllPosts() {
 		Map response = new LinkedHashMap<>();
-		
 		try {
-		List<PostsEntity> listOfPosts =  postRepository.findAll();
-		if(!listOfPosts.isEmpty())
-		{
-		response.put("responseCode", "200");
-		response.put("responseMessage", "Request processed successfully");
- 		response.put("listOfPosts", listOfPosts);
-		}
-		else
-		{
-			response.put("responseCode", "404");
-			response.put("responseMessage", "No Active Posts.");
+			List<PostsEntity> listOfPosts = postRepository.findAll();
+			if (!listOfPosts.isEmpty()) {
+				response.put("responseCode", "200");
+				response.put("responseMessage", "Request processed successfully");
+				response.put("listOfPosts", listOfPosts);
+			} else {
+				response.put("responseCode", "404");
+				response.put("responseMessage", "No Active Posts.");
 			}
-		
-		}
-		catch(Exception ex)
-		{
+		} catch (Exception ex) {
 			response.put("responseCode", "500");
 			response.put("responseMessage", "No Active Posts.");
-			}
+		}
 		return response;
 	}
-
 }

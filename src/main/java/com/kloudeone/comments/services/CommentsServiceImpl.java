@@ -1,7 +1,6 @@
 package com.kloudeone.comments.services;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,9 +44,10 @@ public class CommentsServiceImpl implements CommentsInterface, HelperInterface {
 			commentsEntity = convertObj(commentsModel, commentsEntity);
 			try {
 				commentsEntity.setPosts(validateId.get());
+				commentsEntity.setPostedOn(localDateTime);
 				commentsEntity = commentsRepository.save(commentsEntity);
-				response.put("responseCode", "200");
-				response.put("responseMessage", "Added a new comment.");
+				response.put("responseCode", "201");
+				response.put("responseMessage", "Added a new comment");
 				response.put("postID", commentsEntity.getCommentid());
 			} catch (Exception ex) {
 				response.put("responseCode", "500");
@@ -55,47 +55,58 @@ public class CommentsServiceImpl implements CommentsInterface, HelperInterface {
 			}
 		} else {
 			response.put("responseCode", "404");
-			response.put("responseMessage", "No such post found.");
+			response.put("responseMessage", "No such post found");
 		}
 
 		return response;
 	}
 
 	@Override
-	public Map getAllComments() {
-
+	public Map getAllComments(Long postid) {
 		Map response = new LinkedHashMap<>();
-		List<CommentsEntity> listOfComments = new ArrayList<CommentsEntity>();
-		listOfComments = commentsRepository.findAll();
-		response.put("responseCode", "200");
-		response.put("responseMessage", "Request Processed Successfully");
-		response.put("listOfPosts", listOfComments);
+		Optional<PostsEntity> validatepostId = postsRepository.findById(postid);
+		PostsEntity post = new PostsEntity();
+		if (validatepostId.isPresent()) {
+			post = validatepostId.get();
+			response.put("responseCode", "200");
+			response.put("responseMessage", "Request Processed Successfully");
+			response.put("responseDetails", post);
+		}
+		else
+		{
+			response.put("responseCode", "404");
+			response.put("responseMessage", "No such post found");
+		}
 		return response;
 	}
 
 	@Override
-	public Map addNewReplyComment(Long commentid, CommentsModel commentsModel) {
+	public Map addNewReplyComment(Long postid, Long commentid, CommentsModel commentsModel) {
 		Map response = new LinkedHashMap<>();
-
- 		Optional<CommentsEntity> validateCommentId = commentsRepository.findById(commentid);
-		if (validateCommentId.isPresent()) {
-
-			replyCommentsEntity = convertObj(commentsModel, replyCommentsEntity);
- 			replyCommentsEntity.setCommentsEntity(validateCommentId.get());
-		
-			try {
-				replyCommentsEntity = replyCommentsRepository.save(replyCommentsEntity);
-				
-				response.put("responseCode", "200");
-				response.put("responseMessage", "Added a new reply.");
-				response.put("replyCommentID", replyCommentsEntity.getReplycommentid());
-			} catch (Exception ex) {
-				response.put("responseCode", "500");
-				response.put("responseMessage", "Error in processing - " + ex.getMessage());
+		Optional<PostsEntity> validatepostId = postsRepository.findById(postid);
+		if (validatepostId.isPresent()) {
+			Optional<CommentsEntity> validateCommentId = commentsRepository.findById(commentid);
+			if (validateCommentId.isPresent()) {
+				replyCommentsEntity = convertObj(commentsModel, replyCommentsEntity);
+				replyCommentsEntity.setPostedOn(localDateTime);
+				replyCommentsEntity.setCommentsEntity(validateCommentId.get());
+				try {
+					replyCommentsEntity = replyCommentsRepository.save(replyCommentsEntity);
+					response.put("responseCode", "201");
+					response.put("responseMessage", "Added a new reply");
+					response.put("replyCommentID", replyCommentsEntity.getReplycommentid());
+				} catch (Exception ex) {
+					response.put("responseCode", "500");
+					response.put("responseMessage", "Error in processing - " + ex.getMessage());
+				}
+			} else {
+				response.put("responseCode", "404");
+				response.put("responseMessage", "No such comment found");
 			}
 		} else {
 			response.put("responseCode", "404");
-			response.put("responseMessage", "No such comment found.");
+			response.put("responseMessage", "No such post found");
+
 		}
 		return response;
 	}

@@ -18,28 +18,24 @@ import com.kloudeone.comments.services.PostsServiceImpl;
 @RestController
 @RequestMapping("/kbook/comments")
 public class CommentsController {
-	
+
 	@Autowired
 	private CommentsServiceImpl commentsService;
-	
-	 
-	
-	@PostMapping("/{postid}/add")
-	public Map addNewComment(@PathVariable Long postid,@RequestBody CommentsModel commentsModel)
-	{
-		return commentsService.addNewComment(postid,commentsModel);
+
+	@GetMapping("/{postid}")
+	public Map getPostComment(@PathVariable Long postid) {
+		return commentsService.getAllComments(postid);
 	}
 	
-	@GetMapping("/")
-	public Map getComment()
-	{
-		return commentsService.getAllComments();
+	@PostMapping("/{postid}")
+	public Map addNewComment(@PathVariable Long postid, @RequestBody CommentsModel commentsModel) {
+		return commentsService.addNewComment(postid, commentsModel);
 	}
-	
-	@PostMapping("/{commentid}/reply/")
-	public Map addNewReplyComment(@PathVariable Long commentid,@RequestBody CommentsModel commentsModel)
-	{
-		return commentsService.addNewReplyComment(commentid,commentsModel);
+
+	@PostMapping("/{postid}/reply/{commentid}")
+	public Map addNewReplyComment(@PathVariable Long postid, @PathVariable Long commentid,
+			@RequestBody CommentsModel commentsModel) {
+		return commentsService.addNewReplyComment(postid, commentid, commentsModel);
 	}
 
 }

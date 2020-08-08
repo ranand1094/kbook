@@ -26,7 +26,7 @@ public class PostsServiceImpl implements PostsInterface, HelperInterface {
 		Map response = new LinkedHashMap<>();
 		try {
 			postsEntity = convertObj(postsModel, postsEntity);
-			postsEntity.setPostedOn(localDateTime);
+			postsEntity.setPostedOn(getDateTime());
 			postsEntity = postRepository.save(postsEntity);
 			response.put("responseCode", "201");
 			response.put("responseMessage", "Created a new post");

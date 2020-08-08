@@ -44,7 +44,7 @@ public class CommentsServiceImpl implements CommentsInterface, HelperInterface {
 			commentsEntity = convertObj(commentsModel, commentsEntity);
 			try {
 				commentsEntity.setPosts(validateId.get());
-				commentsEntity.setPostedOn(localDateTime);
+				commentsEntity.setPostedOn(getDateTime());
 				commentsEntity = commentsRepository.save(commentsEntity);
 				response.put("responseCode", "201");
 				response.put("responseMessage", "Added a new comment");
@@ -88,7 +88,7 @@ public class CommentsServiceImpl implements CommentsInterface, HelperInterface {
 			Optional<CommentsEntity> validateCommentId = commentsRepository.findById(commentid);
 			if (validateCommentId.isPresent()) {
 				replyCommentsEntity = convertObj(commentsModel, replyCommentsEntity);
-				replyCommentsEntity.setPostedOn(localDateTime);
+				replyCommentsEntity.setPostedOn(getDateTime());
 				replyCommentsEntity.setCommentsEntity(validateCommentId.get());
 				try {
 					replyCommentsEntity = replyCommentsRepository.save(replyCommentsEntity);

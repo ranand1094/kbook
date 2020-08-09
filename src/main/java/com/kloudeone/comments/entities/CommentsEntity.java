@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
@@ -41,6 +42,6 @@ public class CommentsEntity {
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "commentid",referencedColumnName = "commentid")
-	private List<ReplyCommentsEntity> replyComments;
+ 	private List<ReplyCommentsEntity> replyComments;
  	
 }

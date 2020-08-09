@@ -71,9 +71,7 @@ public class CommentsServiceImpl implements CommentsInterface, HelperInterface {
 			response.put("responseCode", "200");
 			response.put("responseMessage", "Request Processed Successfully");
 			response.put("responseDetails", post);
-		}
-		else
-		{
+		} else {
 			response.put("responseCode", "404");
 			response.put("responseMessage", "No such post found");
 		}
@@ -94,7 +92,7 @@ public class CommentsServiceImpl implements CommentsInterface, HelperInterface {
 					replyCommentsEntity = replyCommentsRepository.save(replyCommentsEntity);
 					response.put("responseCode", "201");
 					response.put("responseMessage", "Added a new reply");
-					response.put("replyCommentID", replyCommentsEntity.getReplycommentid());
+					response.put("replyCommentID", replyCommentsEntity.getReplyparentid());
 				} catch (Exception ex) {
 					response.put("responseCode", "500");
 					response.put("responseMessage", "Error in processing - " + ex.getMessage());
@@ -109,6 +107,47 @@ public class CommentsServiceImpl implements CommentsInterface, HelperInterface {
 
 		}
 		return response;
+	}
+
+	@Override
+	public Map addNewReplyOfReply(Long replyparentid, Long postid, Long commentid, CommentsModel commentsModel) {
+		Map response = new LinkedHashMap<>();
+		Optional<PostsEntity> validatepostId = postsRepository.findById(postid);
+		if (validatepostId.isPresent()) {
+			Optional<CommentsEntity> validateCommentId = commentsRepository.findById(commentid);
+			if (validateCommentId.isPresent()) {
+				Optional<ReplyCommentsEntity> validatereplyId = replyCommentsRepository.findById(replyparentid);
+				if (validatereplyId.isPresent()) {
+					replyCommentsEntity = convertObj(commentsModel, replyCommentsEntity);
+					replyCommentsEntity.setPostedOn(getDateTime());
+					//replyCommentsEntity.setCommentsEntity(validateCommentId.get());
+					replyCommentsEntity.setReplyOfRply(validatereplyId.get());
+
+					try {
+						replyCommentsEntity = replyCommentsRepository.save(replyCommentsEntity);
+						response.put("responseCode", "201");
+						response.put("responseMessage", "Added a new reply");
+						response.put("replyCommentID", replyCommentsEntity.getReplyparentid());
+					} catch (Exception ex) {
+						response.put("responseCode", "500");
+						response.put("responseMessage", "Error in processing - " + ex.getMessage());
+					}
+				} else {
+					response.put("responseCode", "404");
+					response.put("responseMessage", "No such reply found");
+				}
+
+			} else {
+				response.put("responseCode", "404");
+				response.put("responseMessage", "No such comment found");
+			}
+		} else {
+			response.put("responseCode", "404");
+			response.put("responseMessage", "No such post found");
+
+		}
+		return response;
+
 	}
 
 }

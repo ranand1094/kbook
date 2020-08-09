@@ -37,5 +37,10 @@ public class CommentsController {
 			@RequestBody CommentsModel commentsModel) {
 		return commentsService.addNewReplyComment(postid, commentid, commentsModel);
 	}
+	@PostMapping("/{postid}/reply/{commentid}/reply/{replyparentid}")
+	public Map addNewReplyOfReply(@PathVariable Long replyparentid ,@PathVariable Long postid, @PathVariable Long commentid,
+			@RequestBody CommentsModel commentsModel) {
+		return commentsService.addNewReplyOfReply(replyparentid,postid, commentid, commentsModel);
+	}
 
 }

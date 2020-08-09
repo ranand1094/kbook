@@ -41,16 +41,18 @@ public class PostsServiceImpl implements PostsInterface, HelperInterface {
 	@Override
 	public Map getPost(Long post) {
 		Map response = new LinkedHashMap<>();
+		Map subResponse = new LinkedHashMap<>();
+
 		Optional<PostsEntity> posts = postRepository.findById(post);
 		if (posts.isPresent()) {
 			postsEntity = posts.get();
-			response = convertObj(postsEntity, response);
-			response.put("responseCode", "200");
+ 			response.put("responseCode", "202");
 			response.put("responseMessage", "Request processed successfully");
 			response.put("postId", postsEntity.getPostid());
 			response.put("message", postsEntity.getMessage());
 			response.put("postedBy", postsEntity.getPostedBy());
 			response.put("postedOn", postsEntity.getPostedOn());
+			response.put("comments",postsEntity.getComments());
  		} else {
 			response.put("responseCode", "404");
 			response.put("responseMessage", "No such post found");
@@ -64,7 +66,8 @@ public class PostsServiceImpl implements PostsInterface, HelperInterface {
 		try {
 			List<PostsEntity> listOfPosts = postRepository.findAll();
 			if (!listOfPosts.isEmpty()) {
-				response.put("responseCode", "200");
+				
+ 				response.put("responseCode", "200");
 				response.put("responseMessage", "Request processed successfully");
 				response.put("listOfPosts", listOfPosts);
 			} else {

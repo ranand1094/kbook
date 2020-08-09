@@ -9,5 +9,5 @@ public interface CommentsInterface {
 	Map addNewComment(Long postId,CommentsModel commentsModel);
 	Map getAllComments(Long postId);
 	Map addNewReplyComment(Long postId,Long commentId,CommentsModel commentsModel);
-
+	Map addNewReplyOfReply(Long replyparentid,Long postId,Long commentId,CommentsModel commentsModel);
 }

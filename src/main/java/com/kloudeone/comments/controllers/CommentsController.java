@@ -22,9 +22,9 @@ public class CommentsController {
 	@Autowired
 	private CommentsServiceImpl commentsService;
 
-	@GetMapping("/{postid}")
-	public Map getPostComment(@PathVariable Long postid) {
-		return commentsService.getAllComments(postid);
+	@GetMapping("/{postid}/{commentid}")
+	public Map getPostComment(@PathVariable Long postid,@PathVariable Long commentid) {
+		return commentsService.getAllComments(postid,commentid);
 	}
 	
 	@PostMapping("/{postid}")

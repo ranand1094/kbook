@@ -62,15 +62,22 @@ public class CommentsServiceImpl implements CommentsInterface, HelperInterface {
 	}
 
 	@Override
-	public Map getAllComments(Long postid) {
+	public Map getAllComments(Long postid, Long commentid) {
 		Map response = new LinkedHashMap<>();
 		Optional<PostsEntity> validatepostId = postsRepository.findById(postid);
 		PostsEntity post = new PostsEntity();
 		if (validatepostId.isPresent()) {
-			post = validatepostId.get();
-			response.put("responseCode", "200");
-			response.put("responseMessage", "Request Processed Successfully");
-			response.put("responseDetails", post);
+			Optional<CommentsEntity> validatecommentId = commentsRepository.findById(commentid);
+			if (validatecommentId.isPresent()) {
+				commentsEntity = validatecommentId.get();
+				response.put("responseCode", "200");
+				response.put("responseMessage", "Request Processed Successfully");
+				response.put("comments", commentsEntity);
+			}
+			else {
+				response.put("responseCode", "404");
+				response.put("responseMessage", "No such comment found");
+			}
 		} else {
 			response.put("responseCode", "404");
 			response.put("responseMessage", "No such post found");
